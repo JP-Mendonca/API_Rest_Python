@@ -1,4 +1,4 @@
-from flask import Flask, json, render_template, make_response, request, jsonify
+from flask import Flask, render_template, make_response, request, jsonify
 
 app = Flask(__name__)
 
@@ -29,7 +29,7 @@ lista_produtos = [produto(1,"a","higiene","14/05/2021"), produto(2,"b","limpeza"
 def home():
     return "<h1 style='color:red'>Home!</h1>"
 
-
+# a) Cadastro de um novo cliente.
 @app.route("/v1/cliente/", methods=["GET","POST"])
 def cadastra_cliente():
     
@@ -51,8 +51,9 @@ def cadastra_cliente():
         return make_response(jsonify({ "id" : cli._id, "nome": cli._nome, "e-mail" : cli._email, "data de cadastro" : cli._data_cadastro}),201)
 
     # GET - visualiza a lista de clientes completa na página html
-    return render_template("views.html", lista=dic),200
+    return render_template("views.html", lista=dic, tipo="cliente"),200
 
+# b) Cadastro de um novo produto.
 @app.route("/v1/produto/", methods=["GET","POST"])
 def cadastra_produto():
     
@@ -74,8 +75,9 @@ def cadastra_produto():
         return make_response(jsonify({ "id" : prod._id, "nome": prod._nome, "categoria" : prod._categoria, "data de cadastro" : prod._data_cadastro}),201)
 
     # GET - visualiza a lista de produtos completa na página html
-    return render_template("views.html", lista=dic),200
+    return render_template("views.html", lista=dic, tipo="produto"),200
 
+# c) Busca de um cliente pelo id.
 @app.route("/v1/cliente/<id>/")
 def busca_cliente_id(id):
 
@@ -83,15 +85,16 @@ def busca_cliente_id(id):
 
     for cli in lista_clientes:
         if int(id) == cli._id:
-            return make_response(f"Cliente de id {id}: \nNome: {cli._nome} \nE-mail: {cli._email} \nData de cadastro: {cli._data_cadastro}",200)
+            return make_response(jsonify({"id":id, "status":200}),200)
             
             # resposta na página html
             # return render_template("view_busca.html", id=id),200
-    return make_response(f"Cliente com id {id} não encontrado", 400)
+    return make_response(jsonify({"id": -1, "status":400}),400)
 
     # resposta na página html
     # return render_template("view_busca.html", id=-1, tipo="cliente"),400
 
+# d) Busca de um produto pelo id.
 @app.route("/v1/produto/<id>/")
 def busca_produto_id(id):
 
@@ -99,15 +102,27 @@ def busca_produto_id(id):
     
     for prod in lista_produtos:
         if int(id) == prod._id:
-            return make_response(jsonify({"id" : id}),200)
+            return make_response(jsonify({"id" : id, "status": 200}),200)
             
             # resposta na página html
             # return render_template("view_busca.html", id=id),200
-    
-    return make_response(jsonify("Id não encontrado",{"id": id}), 400)
+
+    return make_response(jsonify({"id" : -1, "status": 400}),400)
     
     # resposta na página html
     # return render_template("view_busca.html", id=-1, tipo="produto"),400
+
+# e) Autenticação de dados.
+@app.route("/v1/validacao/")
+def validacao():
+
+    usr = request.headers.get("user")
+    pswd = request.headers.get("password")
+
+    if usr == "linus" and pswd == "windows":
+        return make_response("true",200)
+    
+    return make_response("false",401)
 
 if __name__ == "__main__":
     app.run()

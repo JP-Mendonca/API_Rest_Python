@@ -15,16 +15,22 @@
         <ul>
             {% for c in lista %}
             <li>
-                <div class="row" style="margin: 0px;">
+                <div class="row">
                     <div class="col">
                         <h3>Id: {{ c }}</h3>
                     </div>
                     <div class="col">
                         <h3>Nome: {{lista[c][0]}}</h3>
                     </div>
+                    {% if tipo == 'cliente' %}
                     <div class="col">
                         <h3>E-mail: {{lista[c][1]}}</h3>
                     </div>
+                    {% else %}
+                    <div class="col">
+                      <h3>Categoria: {{lista[c][1]}}</h3>
+                    </div>
+                    {% endif %}
                     <div class="col">
                       <h3>Data de cadastro: {{lista[c][2]}}</h3>
                     </div>
