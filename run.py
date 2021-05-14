@@ -81,8 +81,18 @@ def busca_cliente_id(id):
         if int(id) == cli._id:
             return render_template("view_busca.html", id=id),200
     
-    return render_template("view_busca.html", id=-1),400
+    return render_template("view_busca.html", id=-1, tipo="cliente"),400
 
+@app.route("/v1/produto/<id>")
+def busca_produto_id(id):
+
+    print("\nId enviado: ",id,"\n")
+
+    for prod in lista_produtos:
+        if int(id) == prod._id:
+            return render_template("view_busca.html", id=id),200
+    
+    return render_template("view_busca.html", id=-1, tipo="produto"),400
 
 if __name__ == "__main__":
     app.run()
