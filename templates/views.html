@@ -17,7 +17,16 @@
             <li>
                 <div class="row" style="margin: 0px;">
                     <div class="col">
-                        {{ c,lista[c] }}
+                        <h3>Id: {{ c }}</h3>
+                    </div>
+                    <div class="col">
+                        <h3>Nome: {{lista[c][0]}}</h3>
+                    </div>
+                    <div class="col">
+                        <h3>E-mail: {{lista[c][1]}}</h3>
+                    </div>
+                    <div class="col">
+                      <h3>Data de cadastro: {{lista[c][2]}}</h3>
                     </div>
                 </div>
             </li>
